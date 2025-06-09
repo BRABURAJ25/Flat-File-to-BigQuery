@@ -1,0 +1,25 @@
+import pandas as pd
+
+df = pd.read_csv("bank_transactions.csv")
+print(df.head())
+
+
+
+from google.oauth2 import service_account
+import pandas_gbq
+
+# Path to service account key
+key_path = r"C:\Users\Brabu\Downloads\my-key.json"
+project_id = "bank-transactions-462407"
+
+# Authenticate
+credentials = service_account.Credentials.from_service_account_file(key_path)
+
+# Upload DataFrame to BigQuery
+pandas_gbq.to_gbq(df,
+                  destination_table='bank_data.transactions', 
+                  project_id=project_id,
+                  if_exists='replace',
+                  credentials=credentials)
+
+print("Data uploaded to BigQuery successfully")
